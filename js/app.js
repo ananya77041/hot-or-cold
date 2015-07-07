@@ -1,8 +1,16 @@
 $(document).ready(function(){
 
 	// Hot/Cold Logic
-	var hotCold = function(guess, goal) {
+	var hotCold = function(guess, goal, prev) {
 		var diff = Math.abs(guess-goal);
+
+		if (prev !== undefined) {
+			if (diff == 0) return "You win!";
+			var prevDiff = Math.abs(prev-goal);
+			if (prevDiff > diff) return "Getting hotter!"
+			else return "Getting colder..."
+		}
+
 		if (diff == 0) {
 			return "You win!";
 		}
@@ -20,7 +28,7 @@ $(document).ready(function(){
 		}
 		else {
 			return "Very Hot!";
-		}
+		};
 	};
 
 // Generate goal number
@@ -52,7 +60,13 @@ $("a.close").click(function(){
   		};
 
   		// Process feedback
-  		var feedback = hotCold(guess, goal);
+  		if (+($('#count').text()) == 0) {
+  			var feedback = hotCold(guess, goal);
+  		}
+  		else {
+  			var prev = $('#guessList').children().last().text();
+  			var feedback = hotCold(guess, goal, prev);
+  		}
   		$('#feedback').text(feedback);
 
   		// Add guess to list
